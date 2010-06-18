@@ -1,0 +1,3 @@
+*.py?
+*.log
+config.ini
