@@ -2,12 +2,12 @@
 server: mail.example.com
 ssl: True
 user: example@example.com
-password: "change me"
+password: change me
 
 [notifo]
-user: example
-apikey: 1234123412113412342314
-subject: "mail alert"
+username: example
+secret: 1234123412113412342314
+label: mail alert
 
 [security]
 from: None
