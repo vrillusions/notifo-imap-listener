@@ -15,6 +15,7 @@ import email.parser
 import urllib
 import urllib2
 import json
+import time
 from base64 import encodestring
 from ConfigParser import ConfigParser
 
@@ -78,6 +79,8 @@ class ImapMonitor():
         print 'Running forever, use ctrl-c to cancel'
         while True:
             self.run_once()
+            # Wait for one second so we don't hammer the mail server
+            time.sleep(1)
 
 
 class Notifo():
@@ -169,3 +172,4 @@ if __name__ == "__main__":
 	else:
 		# Main function is done, exit cleanly
 		sys.exit(0)
+
