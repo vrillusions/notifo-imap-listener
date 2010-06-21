@@ -8,10 +8,25 @@ As the name suggests, this connects to a mail server over IMAP and waits for any
 - An email that receives incoming messages
 - An account on http://notifo.com
 
-## Setup
+## Usage
+
+Please note that durring development some options may not actually do anything.
 
 - Create an email that will be the listener
 - Copy config.ini.sample to config.ini and edit with connection info
+- test with `./notifo-imap-listener.py`.
+- if no errors use ctrl-c and then start with `./notifo-imap-listener.py >output.log &`
+- test it by sending an email to the address and it should show up on phone within a second or two.
+
+## Config.ini Options
+
+- Mail section is for setup of email address.
+- Mail.ssl is if the client should connect to the server via SSL (highly recommended).
+- Notifo section is for setup of notifo credentials
+- Notifo.username is your api username which is usually the same as your actual username
+- Notifo.secret is your api secret which you can get from logging in to notifo and click on settings.
+- Security is for ways to prevent anyone from posting to account
+- Security.from, if set to something other than None, will require messages to come from the specified email.  All others will be silently dropped
 
 ## Initial Goals
 
