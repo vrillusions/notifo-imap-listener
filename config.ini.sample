@@ -11,3 +11,7 @@ label: mail alert
 
 [security]
 from: None
+
+[logging]
+file: notifo-imap-listener.log
+level: info
