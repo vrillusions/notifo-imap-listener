@@ -15,7 +15,7 @@ Please note that durring development some options may not actually do anything.
 - Create an email that will be the listener
 - Copy config.ini.sample to config.ini and edit with connection info
 - test with `./notifo-imap-listener.py`.
-- if no errors use ctrl-c and then start with `./notifo-imap-listener.py >output.log &`
+- if no errors use ctrl-c and then start with `./notifo-imap-listener.py >output.log 2>&1 &`
 - test it by sending an email to the address and it should show up on phone within a second or two.
 
 ## Config.ini Options
