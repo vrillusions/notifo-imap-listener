@@ -30,9 +30,12 @@ class ImapMonitor():
         self.password = password
         self.notifo = Notifo()
         # if you get errors here, make sure server supports SSLv2
+        print 'Connecting...'
         self.mail = imaplib.IMAP4_SSL(host=server)
         #self.mail.debug = 4
+        print 'Logging in...'
         self.mail.login(user, password)
+        print 'Success'
 
     def _handle_error(self, error=None):
         print 'ImapMonitor() error: %s' % error
@@ -134,7 +137,6 @@ class Notifo():
         else:
             print 'Error: %s' % result['status']
             return None
-        
     
             
 def main():
@@ -150,8 +152,17 @@ def main():
     
     monitor = ImapMonitor(server=imap_server, ssl=imap_ssl, user=imap_user, 
                           password=imap_password)
-    monitor.run_forever()
-    monitor.cleanup()
+    while True:
+        try:
+            monitor.run_forever()
+            monitor.cleanup()
+        except imaplib.IMAP4.abort, e:
+            # server error, need to start over
+            print "Server error: %s " % e
+            print "reconnecting in 30 seconds"
+            time.sleep(30)
+            monitor.__init__(server=imap_server, ssl=imap_ssl, user=imap_user, 
+                             password=imap_password)
     
 
 if __name__ == "__main__":
