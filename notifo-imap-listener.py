@@ -17,6 +17,7 @@ import urllib2
 import json
 import time
 import logging
+import signal
 from base64 import encodestring
 from ConfigParser import ConfigParser
 
@@ -147,7 +148,17 @@ class Notifo():
             return None
     
             
+def sigterm_handler(signum, frame):
+    """Handles the TERM signal gracefully."""
+    global monitor
+    logmain = logging.getLogger('sigterm_handler')
+    logmain.debug('Received TERM signal, cleaning up')
+    monitor.cleanup()
+    exit(0)
+
+
 def main():
+    global monitor
     config = ConfigParser()
     config.read('config.ini')
     #username = config.get('jabberbot', 'username')
@@ -177,6 +188,8 @@ def main():
     
     monitor = ImapMonitor(server=imap_server, ssl=imap_ssl, user=imap_user, 
                           password=imap_password)
+    
+    signal.signal(signal.SIGTERM, sigterm_handler)
     while True:
         try:
             monitor.run_forever()
