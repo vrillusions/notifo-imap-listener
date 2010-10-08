@@ -6,7 +6,7 @@ Monitors address for new mail and forwards it to notifo.
 
 """
 
-__version__ = "0.1"
+__version__ = "0.2"
 
 import sys
 import traceback
