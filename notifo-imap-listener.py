@@ -6,7 +6,7 @@ Monitors address for new mail and forwards it to notifo.
 
 """
 
-__version__ = "0.2"
+__version__ = "0.3"
 
 import sys
 import traceback
@@ -69,6 +69,8 @@ class ImapMonitor():
             # Above auto marks as seen, this reverses that and makes it new again
             #typ, data = self.mail.store(num, '-FLAGS', '\\Seen')
             msg = email.parser.Parser().parsestr(rfc[0][1])
+            subject = msg.get('Subject')
+            self.logger.debug('Subject line: ' + subject)
             text = ''
             if msg.is_multipart():
                 for part in msg.walk():
@@ -79,7 +81,7 @@ class ImapMonitor():
             text = text.strip()
             self.logger.debug('Text sent to notifo: %s' % text)
             # TODO: if something fails the message won't retry
-            self.notifo.send_notification(msg=text)
+            self.notifo.send_notification(msg=text, title=subject)
             #print '-----'
             #print text
             #print '-----'
@@ -127,18 +129,23 @@ class Notifo():
         request.add_header('Authorization', 'Basic %s' % auth.rstrip())
         try:
             response = urllib2.urlopen(request)
+            content = response.read()
         except urllib2.HTTPError, e:
             # may have an error for why it doesn't work
             self.logger.error(e.fp.readline())
+            self.logger.error(e.code)
             return None
         except urllib2.URLError, e:
             # a non http error, may be a typo
             self.logger.error(e.reason)
             return None
         try:
-            result = json.loads(response.read())
+            result = json.loads(content)
         except ValueError, e:
             self.logger.error('Error parsing response: %s' % e)
+            self.logger.debug('Response headers: %s' % response.info())
+            self.logger.debug('Response content: %s' % content)
+            return None
         
         if result['status'] == 'success':
             self.logger.debug('Message sent successfuly')

@@ -1,6 +1,8 @@
 # Notifo IMAP Listener
 
-As the name suggests, this connects to a mail server over IMAP and waits for any incoming emails.  When it receives a message it sends it off to notifo.  The key thing it must do is offer as close to realtime as possible.
+As the name suggests, this connects to a mail server over IMAP and waits for any incoming emails.  When it receives a message it sends it off to notifo.
+
+While notifo has a built in email notification this script is still useful since you can send the content of the message where notifo's built in notification only parses the subject (as of Aug 2011).
 
 ## Requirements
 
