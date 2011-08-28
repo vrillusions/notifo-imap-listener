@@ -126,6 +126,7 @@ class Notifo():
         auth = encodestring('%s:%s' % (self.username, self.secret))
         values = urllib.urlencode(data)
         request = urllib2.Request(self.base_url + 'send_notification', values)
+        request.add_header('User-Agent', 'Notifo-imap-listener/%s' % __version__)
         request.add_header('Authorization', 'Basic %s' % auth.rstrip())
         try:
             response = urllib2.urlopen(request)
