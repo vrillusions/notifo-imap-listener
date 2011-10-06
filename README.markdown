@@ -1,4 +1,4 @@
-# Notifo IMAP Listener
+# Notifo IMAP Listener [![status](http://stillmaintained.com/vrillusions/notifo-imap-listener.png)](http://stillmaintained.com/vrillusions/notifo-imap-listener)
 
 As the name suggests, this connects to a mail server over IMAP and waits for any incoming emails.  When it receives a message it sends it off to notifo.
 
