@@ -1,5 +1,9 @@
 # Notifo IMAP Listener [![status](http://stillmaintained.com/vrillusions/notifo-imap-listener.png)](http://stillmaintained.com/vrillusions/notifo-imap-listener)
 
+# IMPORTANT NOTICE
+
+As of September 8, 2011 notifo is no longer being actively developed ([source](http://blog.notifo.com/notifo)).  I will do my best to hammer out the remaining big bugs this has but you should look into other services.  I've started to use [boxcar](http://boxcar.io/) and may make a similar project for that as boxcar's email notification also does not send the content of the email.
+
 As the name suggests, this connects to a mail server over IMAP and waits for any incoming emails.  When it receives a message it sends it off to notifo.
 
 While notifo has a built in email notification this script is still useful since you can send the content of the message where notifo's built in notification only parses the subject (as of Aug 2011).
