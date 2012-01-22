@@ -21,7 +21,7 @@ from ConfigParser import ConfigParser
 from optparse import OptionParser
 
 
-__version__ = "0.4.0"
+__version__ = "0.4.1"
 
 
 class ImapMonitor():
@@ -83,7 +83,7 @@ class ImapMonitor():
             text = text.strip()
             self.logger.debug('Text sent to notifo: %s' % text)
             # TODO: if something fails the message won't retry
-            if not self.notifo.send_notification(msg=text, title=subject):
+            if self.notifo.send_notification(msg=text, title=subject):
                 # mark message as deleted only if success
                 self.mail.store(num, '+FLAGS', '\\Deleted')
             #print '-----'
