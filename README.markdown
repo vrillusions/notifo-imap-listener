@@ -1,6 +1,6 @@
 # Notifo IMAP Listener [![status](http://stillmaintained.com/vrillusions/notifo-imap-listener.png)](http://stillmaintained.com/vrillusions/notifo-imap-listener)
 
-# IMPORTANT NOTICE
+## IMPORTANT NOTICE
 
 As of September 8, 2011 notifo is no longer being actively developed ([source](http://blog.notifo.com/notifo)).  I will do my best to hammer out the remaining big bugs this has but you should look into other services.  I've started to use [boxcar](http://boxcar.io/) and may make a similar project for that as boxcar's email notification also does not send the content of the email.
 
@@ -10,13 +10,13 @@ While notifo has a built in email notification this script is still useful since
 
 ## Requirements
 
-- Python 2.6 (May work with 2.5 but development is done on 2.6)
+- Python 2.x (May work with 2.5 but development is done on 2.6)
 - An email that receives incoming messages
 - An account on http://notifo.com
 
 ## Usage
 
-Please note that durring development some options may not actually do anything.
+Please note that during development some options may not actually do anything.
 
 - Create an email that will be the listener
 - Copy config.ini.sample to config.ini and edit with connection info
@@ -27,16 +27,13 @@ Please note that durring development some options may not actually do anything.
 
 ## Config.ini Options
 
-- Mail section is for setup of email address.
-- Mail.ssl is if the client should connect to the server via SSL (highly recommended).
-- Notifo section is for setup of notifo credentials
-- Notifo.username is your api username which is usually the same as your actual username
-- Notifo.secret is your api secret which you can get from logging in to notifo and click on settings.
-- Security is for ways to prevent anyone from posting to account
-- Security.from, if set to something other than None, will require messages to come from the specified email.  All others will be silently dropped
-- Logging is for the logging system
-- Logging.file is the file to log to. If you don't want to log to a file use /dev/null
-- Logging.level one of debug, info, warning, error, or critical. Used for both console and log file
+- `mail.ssl` is if the client should connect to the server via SSL (highly recommended).
+- `notifo.username` is your api username which is usually the same as your actual username
+- `notifo.secret` is your api secret which you can get from logging in to notifo and click on settings.
+- `notifo.label` will prefix the subject of the message.
+- `security.from` if set to something other than None, will require messages to come from the specified email.  All others will be silently dropped
+- `logging.file` is the file to log to. If you don't want to log to a file use /dev/null
+- `logging.level` one of debug, info, warning, error, or critical. Used for both console and log file. To turn off pretty much all logging set this to critical.
 
 ## Initial Goals
 

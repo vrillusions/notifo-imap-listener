@@ -6,8 +6,6 @@ Monitors address for new mail and forwards it to notifo.
 
 """
 
-__version__ = "0.3"
-
 import sys
 import traceback
 import imaplib
@@ -22,9 +20,12 @@ from base64 import encodestring
 from ConfigParser import ConfigParser
 
 
+__version__ = "0.3.0"
+
+
 class ImapMonitor():
     """The class that monitors the mail account"""
-    
+
     def __init__(self, user, password, server='localhost', ssl=True):
         self.logger = logging.getLogger('ImapMonitor')
         self.server = server
@@ -44,11 +45,11 @@ class ImapMonitor():
         self.logger.critical(error)
         self.cleanup()
         sys.exit(1)
-        
+
     def cleanup(self):
         self.logger.debug('Logging out')
         self.mail.logout()
-    
+
     def run_once(self):
         self.mail.select()
         typ, msgnums = self.mail.search(None, 'UNSEEN')
@@ -85,7 +86,7 @@ class ImapMonitor():
             #print '-----'
             #print text
             #print '-----'
-        
+
     def run_forever(self):
         self.logger.info('Running forever, use ctrl-c to cancel')
         while True:
@@ -104,7 +105,7 @@ class Notifo():
         self.username = config.get('notifo', 'username')
         self.secret = config.get('notifo', 'secret')
         self.label = config.get('notifo', 'label')
-    
+
     def send_notification(self, to=None, msg=None, label=None, title=None, uri=None):
         data = {}
         if to is not None:
@@ -122,7 +123,7 @@ class Notifo():
             data['title'] = title
         if uri is not None:
             data['uri'] = uri
-            
+
         auth = encodestring('%s:%s' % (self.username, self.secret))
         values = urllib.urlencode(data)
         request = urllib2.Request(self.base_url + 'send_notification', values)
@@ -147,15 +148,15 @@ class Notifo():
             self.logger.debug('Response headers: %s' % response.info())
             self.logger.debug('Response content: %s' % content)
             return None
-        
+
         if result['status'] == 'success':
             self.logger.debug('Message sent successfuly')
             return True
         else:
             self.logger.error(result['status'])
             return None
-    
-            
+
+
 def sigterm_handler(signum, frame):
     """Handles the TERM signal gracefully."""
     global monitor
@@ -176,7 +177,7 @@ def main():
     imap_ssl = config.getboolean('mail', 'ssl')
     imap_user = config.get('mail', 'user')
     imap_password = config.get('mail', 'password')
-    
+
     # configure logging
     LEVELS = {'debug': logging.DEBUG,
               'info': logging.INFO,
@@ -193,10 +194,10 @@ def main():
     consolelog.setFormatter(logging.Formatter("%(levelname)-8s: %(message)s"))
     logging.getLogger('').addHandler(consolelog)
     logmain = logging.getLogger('main')
-    
+
     monitor = ImapMonitor(server=imap_server, ssl=imap_ssl, user=imap_user, 
                           password=imap_password)
-    
+
     signal.signal(signal.SIGTERM, sigterm_handler)
     while True:
         try:
@@ -214,24 +215,24 @@ def main():
             monitor.cleanup()
             # not raising since everything has been handled
             sys.exit(0)
-    
+
 
 if __name__ == "__main__":
     # TODO: run cleanup function if needed
-	try:
-		main()
-	except KeyboardInterrupt, e:
-		# Ctrl-c
+    try:
+        main()
+    except KeyboardInterrupt, e:
+        # Ctrl-c
         raise e
-	except SystemExit, e:
-		# sys.exit()
-		raise e
-	except Exception, e:
-		print "ERROR, UNEXPECTED EXCEPTION"
-		print str(e)
-		traceback.print_exc()
-		sys.exit(1)
-	else:
-		# Main function is done, exit cleanly
-		sys.exit(0)
+    except SystemExit, e:
+        # sys.exit()
+        raise e
+    except Exception, e:
+        print "ERROR, UNEXPECTED EXCEPTION"
+        print str(e)
+        traceback.print_exc()
+        sys.exit(1)
+    else:
+        # Main function is done, exit cleanly
+        sys.exit(0)
 
