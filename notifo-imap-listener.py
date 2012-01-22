@@ -18,6 +18,7 @@ import logging
 import signal
 from base64 import encodestring
 from ConfigParser import ConfigParser
+from optparse import OptionParser
 
 
 __version__ = "0.3.0"
@@ -161,15 +162,25 @@ def sigterm_handler(signum, frame):
     """Handles the TERM signal gracefully."""
     global monitor
     logmain = logging.getLogger('sigterm_handler')
-    logmain.debug('Received TERM signal, cleaning up')
+    logmain.info('Received TERM signal, cleaning up')
     monitor.cleanup()
     exit(0)
 
 
 def main():
     global monitor
+    parser = OptionParser(version='%prog v' + __version__)
+    parser.add_option('-c', '--config', default='config.ini',
+                      help='Location of config file (default: %default)', 
+                      metavar='FILE')
+    parser.add_option('-v', '--verbose', action="store_true", dest="verbose",
+                      default=False, help='Print out extra info')
+    parser.add_option('-q', '--quiet', action="store_true", dest="quiet",
+                      default=False, help="Don't print anything to screen")
+    (options, args) = parser.parse_args()
+    
     config = ConfigParser()
-    config.read('config.ini')
+    config.read(options.config)
     #username = config.get('jabberbot', 'username')
     #password = config.get('jabberbot', 'password')
     #adminjid = config.get('jabberbot', 'adminjid')
@@ -185,14 +196,21 @@ def main():
               'error': logging.ERROR,
               'critical': logging.CRITICAL}
     level = LEVELS.get(config.get('logging', 'level'), logging.NOTSET)
+    # file logging
     logging.basicConfig(level=level,
                         format="%(asctime)s: %(name)s: %(levelname)s: %(message)s",
                         filename=config.get('logging', 'file'),
                         filemode='a')
-    consolelog = logging.StreamHandler()
-    consolelog.setLevel(level)
-    consolelog.setFormatter(logging.Formatter("%(levelname)-8s: %(message)s"))
-    logging.getLogger('').addHandler(consolelog)
+    # log to console
+    if not options.quiet:
+        consolelog = logging.StreamHandler()
+        if options.verbose:
+            consolelog.setLevel(logging.DEBUG)
+        else:
+            # don't think I even have any critical level alerts right now
+            consolelog.setLevel(logging.INFO)
+        consolelog.setFormatter(logging.Formatter("%(levelname)-8s: %(message)s"))
+        logging.getLogger('').addHandler(consolelog)
     logmain = logging.getLogger('main')
 
     monitor = ImapMonitor(server=imap_server, ssl=imap_ssl, user=imap_user, 
@@ -211,7 +229,7 @@ def main():
                              password=imap_password)
         except KeyboardInterrupt, e:
             # Ctrl-c
-            logmain.debug('Received ctrl-c or SIGINT, cleaning up')
+            logmain.info('Received ctrl-c or SIGINT, cleaning up')
             monitor.cleanup()
             # not raising since everything has been handled
             sys.exit(0)

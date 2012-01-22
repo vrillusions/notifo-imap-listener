@@ -21,7 +21,7 @@ Please note that during development some options may not actually do anything.
 - Create an email that will be the listener
 - Copy config.ini.sample to config.ini and edit with connection info
 - test with `./notifo-imap-listener.py`.
-- if no errors use ctrl-c and then start with `./notifo-imap-listener.py >output.log 2>&1 &`
+- if no errors use ctrl-c and then start with `./notifo-imap-listener.py --quiet &`
 - test it by sending an email to the address and it should show up on phone within a second or two.
 - to properly kill use either ctrl-c if interactive or send SIGINT to process `kill -INT 123` where 123 is process id
 
@@ -33,7 +33,7 @@ Please note that during development some options may not actually do anything.
 - `notifo.label` will prefix the subject of the message.
 - `security.from` if set to something other than None, will require messages to come from the specified email.  All others will be silently dropped
 - `logging.file` is the file to log to. If you don't want to log to a file use /dev/null
-- `logging.level` one of debug, info, warning, error, or critical. Used for both console and log file. To turn off pretty much all logging set this to critical.
+- `logging.level` one of debug, info, warning, error, or critical. Used for log file. To turn off pretty much all logging set this to critical.
 
 ## Initial Goals
 
