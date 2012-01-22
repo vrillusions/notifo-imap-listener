@@ -83,7 +83,9 @@ class ImapMonitor():
             text = text.strip()
             self.logger.debug('Text sent to notifo: %s' % text)
             # TODO: if something fails the message won't retry
-            self.notifo.send_notification(msg=text, title=subject)
+            if not self.notifo.send_notification(msg=text, title=subject):
+                # mark message as deleted only if success
+                self.mail.store(num, '+FLAGS', '\\Deleted')
             #print '-----'
             #print text
             #print '-----'
