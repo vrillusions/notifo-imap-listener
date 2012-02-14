@@ -21,7 +21,7 @@ from ConfigParser import ConfigParser
 from optparse import OptionParser
 
 
-__version__ = "0.4.1"
+__version__ = "0.4.2"
 
 
 class ImapMonitor():
