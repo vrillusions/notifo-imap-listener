@@ -1,4 +1,4 @@
-# Notifo IMAP Listener [![status](http://stillmaintained.com/vrillusions/notifo-imap-listener.png)](http://stillmaintained.com/vrillusions/notifo-imap-listener)
+# Notifo IMAP Listener
 
 ## IMPORTANT NOTICE
 
